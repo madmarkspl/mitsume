@@ -2,30 +2,30 @@
 #include "Service.h"
 class GameObject;
 
-class InputComponent
+class CInputComponent
 {
 public:
-		virtual ~InputComponent() {}
+		virtual ~CInputComponent() {}
 		virtual void update(GameObject& obj /* level */) = 0;
 };
 
-class PhysicsComponent
+class CPhysicsComponent
 {
 public:
-		virtual ~PhysicsComponent() {}
+		virtual ~CPhysicsComponent() {}
 		virtual void update(GameObject& obj /* level */ ) = 0;
 };
 
-class GraphicsComponent
+class CGraphicsComponent
 {
 public:
-		virtual ~GraphicsComponent() {}
+		virtual ~CGraphicsComponent() {}
 		virtual void update(GameObject& obj, CWindow& graphics) = 0;
 };
 
-class AudioComponent
+class CAudioComponent
 {
 public:
-		virtual ~AudioComponent() {}
+		virtual ~CAudioComponent() {}
 		virtual void update(GameObject& obj, CWindow& graphics) = 0;
 };
