@@ -36,11 +36,7 @@ void CIntroState::update(CGame* game)
 void CIntroState::draw(CGame* game)
 {
 		
-		CService::getGraphics(0)->clear();
-		CService::getGraphics(0)->drawObject();
-		CService::getGraphics(0)->render();
-
-		CService::getGraphics(1)->clear();
-		CService::getGraphics(1)->drawObject();
-		CService::getGraphics(1)->render();
+	CService::getGraphics(0)->clear();
+	CService::getGraphics(0)->drawObject();
+	CService::getGraphics(0)->render();
 }

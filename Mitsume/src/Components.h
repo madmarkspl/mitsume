@@ -1,31 +1,33 @@
 #pragma once
-#include "Service.h"
-class GameObject;
+
+class CWindow;
+class CGameObject;
+class CLevel;
 
 class CInputComponent
 {
 public:
 		virtual ~CInputComponent() {}
-		virtual void update(GameObject& obj /* level */) = 0;
+		virtual void update(CGameObject& obj) = 0;
 };
 
 class CPhysicsComponent
 {
 public:
 		virtual ~CPhysicsComponent() {}
-		virtual void update(GameObject& obj /* level */ ) = 0;
+		virtual void update(CGameObject& obj, CLevel& level) = 0;
 };
 
 class CGraphicsComponent
 {
 public:
 		virtual ~CGraphicsComponent() {}
-		virtual void update(GameObject& obj, CWindow& graphics) = 0;
+		virtual void update(CGameObject& obj, CWindow& window) = 0;
 };
 
 class CAudioComponent
 {
 public:
 		virtual ~CAudioComponent() {}
-		virtual void update(GameObject& obj, CWindow& graphics) = 0;
+		virtual void update(CGameObject& obj) = 0;
 };
