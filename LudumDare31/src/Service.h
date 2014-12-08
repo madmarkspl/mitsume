@@ -2,6 +2,7 @@
 #include <vector>
 
 class CWindow;
+class CCamera;
 
 class CService
 {
@@ -10,7 +11,8 @@ public:
 	~CService();
 
 	static int* getAudio() { return _audioService; }
-	static CWindow* getGraphics(int index) { return _graphicsService; }
+	static CWindow* getGraphics() { return _graphicsService; }
+	static CCamera* getCamera() { return _cameraService; }
 
 	static void provideAudio(int* service)
 	{
@@ -22,8 +24,14 @@ public:
 		_graphicsService = service;
 	}
 
+	static void provideCamera(CCamera* camera)
+	{
+		_cameraService = camera;
+	}
+
 private:
 	static int* _audioService;
 	static CWindow* _graphicsService;
+	static CCamera* _cameraService;
 };
 

@@ -6,25 +6,29 @@
 //#include <cstdlib>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <SOIL.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <SOIL.h>
-
 #include "Service.h"
 #include "Window.h"
 #include "Game.h"
 #include "IntroState.h"
+#include "PlayState.h"
+#include "Camera.h"
 
 int main()
 {
-	CWindow* mainWindow = new CWindow("Test", 640, 480);
+	srand(time(NULL));
+	CWindow* mainWindow = new CWindow("Test", 1280, 720);
+
 	CShader program("shader/basic.vert", "shader/basic.frag");
 	mainWindow->addShaderProgram("basic", program);
 	CService::provideGraphics(mainWindow);
 
 	CGame mitsume;
-	mitsume.pushState(new CIntroState());
+	mainWindow->attachCallbackPointer(&mitsume);
+	mitsume.pushState(new CPlayState());
 
 	GLdouble previousFrameTime = glfwGetTime();
 	GLdouble lagTime = 0.0;
@@ -36,7 +40,7 @@ int main()
 		previousFrameTime = currentFrameTime;
 		lagTime += elapsedTime;
 
-		mitsume.handleEvents();
+		//mitsume.handleInput();
 		glfwPollEvents();
 
 		while (lagTime >= 20)
@@ -45,7 +49,7 @@ int main()
 			lagTime -= 20;	
 		}
 
-		Sleep(20);
+		//Sleep(20);
 
 		mitsume.draw(lagTime / 20.0);
 	}

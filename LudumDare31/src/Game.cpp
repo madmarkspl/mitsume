@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Game.h"
 #include "GameState.h"
 
@@ -51,9 +52,16 @@ void CGame::popState()
 	}
 }
 
-void CGame::handleEvents()
+void CGame::handleInput(int key, int action)
 {
-	_stateStack.top()->handleInput(this);
+	//std::cout << "key!" << std::endl;
+	_stateStack.top()->handleInput(this, key, action);
+}
+
+void CGame::handleInput(double x, double y)
+{
+	//std::cout << "mouse!" << std::endl;
+	_stateStack.top()->handleInput(this, x, y);
 }
 
 void CGame::update()

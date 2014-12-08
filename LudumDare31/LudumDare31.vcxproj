@@ -13,23 +13,25 @@
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\IntroState.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\PlayState.cpp" />
     <ClCompile Include="src\Service.cpp" />
+    <ClCompile Include="src\Unit.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Components.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\GameState.h" />
     <ClInclude Include="src\IntroState.h" />
     <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\PlayState.h" />
     <ClInclude Include="src\Service.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Unit.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>

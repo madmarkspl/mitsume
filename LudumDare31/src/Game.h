@@ -13,7 +13,8 @@ public:
 	void pushState(CGameState* state);
 	void popState();
 
-	void handleEvents();
+	void handleInput(int key, int action);
+	void handleInput(double x, double y);
 	void update();
 	void draw(double extrapolation);
 

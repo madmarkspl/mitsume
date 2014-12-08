@@ -17,7 +17,6 @@ public:
 private:
 	glm::vec3 _position;
 	glm::vec3 _front;
-	glm::vec3 _up;
 	glm::vec3 _right;
 	glm::vec3 _worldUp;
 

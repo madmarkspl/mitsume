@@ -3,7 +3,7 @@
 CCamera::CCamera()
 {
 	_position = glm::vec3(0.0f, 0.0f, 0.0f);
-	_up = glm::vec3(0.0f, 1.0f, 0.0f);
+	_worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	_yaw = -90.0f;
 	_pitch = 0.0f;
 	_front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -17,7 +17,7 @@ CCamera::CCamera()
 CCamera::CCamera(glm::vec3 position, glm::vec3 up, GLfloat yaw, GLfloat pitch)
 {
 	_position = position;
-	_up = up;
+	_worldUp = up;
 	_yaw = yaw;
 	_pitch = pitch;
 	_front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -46,5 +46,5 @@ void CCamera::updateCameraVectors()
 	_front = glm::normalize(front);
 	// Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	_right = glm::normalize(glm::cross(_front, _worldUp));
-	_up = glm::normalize(glm::cross(_front, _right));
+	_worldUp = glm::normalize(glm::cross(_front, _right));
 }
