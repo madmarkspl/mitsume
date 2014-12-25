@@ -13,6 +13,7 @@ public:
 	~CCamera();
 
 	glm::mat4 getViewMatrix();
+	float getZoom();
 
 private:
 	glm::vec3 _position;

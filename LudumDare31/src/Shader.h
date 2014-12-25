@@ -11,22 +11,20 @@ class CShader
 public:
 	CShader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	{
-			// 1. Retrieve the vertex/fragment source code from filePath
 			std::string vertexCode;
 			std::string fragmentCode;
 			try
 			{
-					// Open files
 					std::ifstream vShaderFile(vertexPath);
 					std::ifstream fShaderFile(fragmentPath);
 					std::stringstream vShaderStream, fShaderStream;
-					// Read file's buffer contents into streams
+
 					vShaderStream << vShaderFile.rdbuf();
 					fShaderStream << fShaderFile.rdbuf();
-					// close file handlers
+	
 					vShaderFile.close();
 					fShaderFile.close();
-					// Convert stream into string
+
 					vertexCode = vShaderStream.str();
 					fragmentCode = fShaderStream.str();
 			}

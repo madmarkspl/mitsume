@@ -13,5 +13,8 @@ out vec4 vertColor;
 void main()
 {
 	vertColor = color;
-	gl_Position = proj * view * model * vec4(position, 0.0, 1.0);
+	vec4 pos = model * vec4(position, 0.0, 1.0);
+	gl_Position = pos;
+
+	
 }

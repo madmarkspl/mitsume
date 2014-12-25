@@ -52,5 +52,5 @@ void CIntroState::draw(CGame* game)
 		2.0f, 0.0f  // Vertex 6 (X, Y)
 	};
 	//CService::getGraphics()->drawObject("basic", GL_TRIANGLE_FAN, vertices, sizeof(vertices), glm::vec4(1.0, 0.0, 1.0, 0.5));
-	CService::getGraphics()->render();
+	//CService::getGraphics()->render();
 }

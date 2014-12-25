@@ -6,18 +6,19 @@
 
 void CPlayState::init()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		int x = rand() % 1200;
-		int y = rand() % 700;
-		int w = rand() % 10 + 10;
-		int h = w;//rand() % 40 + 10;
+		float x = (float)((rand() % 2400 - 1200) / 1200.0);
+		float y = (float)((rand() % 1400 - 700) / 700.0);
+		float w = (float)((rand() % 10 + 10) / 500.0);
+		float h = (float)(w * (1280.0 / 720.0));
 
 		float r, g, b;
-		r = (rand() % 100) / 100.0;;
-		g = (rand() % 100) / 100.0;
-		b = (rand() % 100) / 100.0;
-		_units.push_back(new CUnit(glm::vec2(x, y), w, h, 1, glm::vec4(r, g, b, 1.0)));
+		r = (float)((rand() % 100) / 100.0);
+		g = (float)((rand() % 100) / 100.0);
+		b = (float)((rand() % 100) / 100.0);
+		std::cout << x << " " << y << " " << w << std::endl;
+		_units.push_back(new CUnit(glm::vec2(x, y), w, h, 0.003f, glm::vec4(r, g, b, 1.0)));
 	}
 }
 
@@ -50,15 +51,15 @@ void CPlayState::handleInput(CGame* game, double x, double y)
 	if (_lmbPressed)
 	{
 		std::cout << "wcisniety!" << std::endl;
-		_select[2] = x;
-		_select[3] = 720-y;
+		_select[2] = (float)x;
+		_select[3] = (float)(720 - y);
 	}
 	else
 	{
-		_select[0] = x;
-		_select[1] = 720-y;
-		_select[2] = x;
-		_select[3] = 720-y;
+		_select[0] = (float)x;
+		_select[1] = (float)(720 - y);
+		_select[2] = (float)x;
+		_select[3] = (float)(720 - y);
 	}
 
 }
@@ -84,7 +85,8 @@ void CPlayState::draw(CGame* game)
 
 	drawSelectionRect();
 
-	CService::getGraphics()->render();
+	//CService::getGraphics()->render();
+	CService::getGraphics()->swapBuffers();
 }
 
 void CPlayState::drawSelectionRect()

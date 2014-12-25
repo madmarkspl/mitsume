@@ -40,10 +40,10 @@ void CUnitInputComponent::update(CUnit& unit)
 
 	unit._position += _moveVector*unit._velocity;
 	
-	if (unit._position.x - unit._width / 2 <= 0 || unit._position.x + unit._width / 2 >= 1279)
+	if (unit._position.x - unit._width / 2 <= -1 || unit._position.x + unit._width / 2 >= 1)
 		unit._position.x -= _moveVector.x*unit._velocity;
 
-	if (unit._position.y - unit._height / 2 <= 0 || unit._position.y + unit._height / 2 >= 719)
+	if (unit._position.y - unit._height / 2 <= -1 || unit._position.y + unit._height / 2 >= 1)
 		unit._position.y -= _moveVector.y*unit._velocity;
 }
 

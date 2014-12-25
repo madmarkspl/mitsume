@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "Components.h"
+#include "Batch.h"
 
 class CUnit
 {

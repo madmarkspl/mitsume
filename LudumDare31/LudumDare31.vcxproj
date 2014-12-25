@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Batch.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\IntroState.cpp" />
@@ -22,6 +23,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Batch.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Components.h" />
     <ClInclude Include="src\Game.h" />
@@ -72,13 +74,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\glew\include;$(SolutionDir)\glm\include;$(SolutionDir)\soil\src;$(SolutionDir)\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\pdcurses;$(SolutionDir)\glew\include;$(SolutionDir)\glm\include;$(SolutionDir)\soil\src;$(SolutionDir)\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-DGLEW_STATIC %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\soil\lib;$(SolutionDir)\glfw\lib32;$(SolutionDir)\glew\lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\pdcurses;$(SolutionDir)\soil\lib;$(SolutionDir)\glfw\lib32;$(SolutionDir)\glew\lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pdcurses.lib;glfw3.lib;glew32s.lib;opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>
+      </SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
