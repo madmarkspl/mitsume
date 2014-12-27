@@ -1,9 +1,11 @@
 #include <exception>
 #include "Batch.h"
+#include "Service.h"
+#include "Window.h"
 
 CBatch::CBatch(GLuint maxVertices) :
 _maxNumVertices(maxVertices), _numUsedVertices(0),
-	_vao(0), _vbo(0), _config(GL_TRIANGLES, 0, 0),
+	_vao(0), _vbo(0), _config(GL_TRIANGLE_STRIP, 0, 0),
 	_lastVertex(glm::vec3(), glm::vec4())
 {
 	glGetError();
@@ -17,11 +19,11 @@ _maxNumVertices(maxVertices), _numUsedVertices(0),
 
 	GLuint offset = 0;
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
 	glEnableVertexAttribArray(0);
 	offset += sizeof(glm::vec3);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
 	glEnableVertexAttribArray(1);
 	offset += sizeof(glm::vec4);
 
@@ -59,7 +61,7 @@ bool CBatch::isEmpty() const
 
 bool CBatch::isEnoughRoom(GLuint numVertices)
 {
-	GLuint numExtraVertices = (GL_TRIANGLE_STRIP == _config._textureId && _numUsedVertices > 0 ? 2 : 0);
+	GLuint numExtraVertices = (GL_TRIANGLE_STRIP == _config._renderType && _numUsedVertices > 0 ? 2 : 0);
 
 	return (_numUsedVertices + numExtraVertices + numVertices <= _maxNumVertices);
 }
@@ -82,7 +84,7 @@ void CBatch::add(const std::vector<Vertex>& vertices, const BatchConfig& config)
 
 void CBatch::add(const std::vector<Vertex>& vertices)
 {
-	GLuint numExtraVertices = (GL_TRIANGLE_STRIP == _config._textureId && _numUsedVertices > 0 ? 2 : 0);
+	GLuint numExtraVertices = (GL_TRIANGLE_STRIP == _config._renderType && _numUsedVertices > 0 ? 2 : 0);
 
 	if (numExtraVertices + vertices.size() > _maxNumVertices - _numUsedVertices)
 		throw new std::exception(std::string(__FUNCTION__ + std::string(" not enough room for vertices.")).c_str());
@@ -115,6 +117,8 @@ void CBatch::render()
 {
 	if (_numUsedVertices == 0)
 		return;
+
+	CService::getGraphics()->setModelMatrix(_config._transformMatrix);
 
 	glBindVertexArray(_vao);
 	glDrawArrays(_config._renderType, 0, _numUsedVertices);

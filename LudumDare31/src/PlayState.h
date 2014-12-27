@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "GameState.h"
+#include "Batch.h"
 
 class CGame;
 class CUnit;
@@ -8,6 +9,7 @@ class CUnit;
 class CPlayState : public CGameState
 {
 public:
+	CPlayState() : _select(4) {}
 	void init();
 	void cleanup();
 
@@ -24,7 +26,7 @@ private:
 
 	std::vector<CUnit*> _units;
 	std::vector<CUnit*> _selectedUnits;
-	float _select[4];
+	std::vector<Vertex> _select;
 
 	bool _lmbPressed;
 

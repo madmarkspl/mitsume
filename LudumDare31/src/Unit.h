@@ -8,7 +8,7 @@ class CUnit
 	friend class CUnitGraphicsComponent;
 	friend class CUnitInputComponent;
 public:
-	CUnit(glm::vec2 position, float width, float height, float velocity, glm::vec4 color);
+	CUnit(glm::vec3 position, float width, float height, float velocity, glm::vec4 color);
 
 	~CUnit();
 
@@ -17,7 +17,7 @@ public:
 	void draw(CWindow& window);
 
 private:
-	glm::vec2 _position;
+	glm::vec3 _position;
 	float _velocity;
 	float _width;
 	float _height;
@@ -38,7 +38,7 @@ public:
 	void update(CUnit& unit);
 
 private:
-	glm::vec2 _moveVector;
+	glm::vec3 _moveVector;
 };
 
 class CUnitPhysicsComponent : public CPhysicsComponent
@@ -67,10 +67,10 @@ private:
 class CUnitGraphicsComponent : public CGraphicsComponent
 {
 public:
-	CUnitGraphicsComponent(glm::vec2 pos, float width, float height, glm::vec4 color) : _color(color)
+	CUnitGraphicsComponent(glm::vec3 pos, float width, float height, glm::vec4 color) :
+		_color(color), _vertices(4)
 	{
-		
-
+		_config = BatchConfig(GL_TRIANGLE_STRIP, 0, 0);
 		/*_vertices[8] = pos.x + widthHalved;
 		_vertices[9] = pos.y + heightHalved;
 
@@ -96,5 +96,6 @@ public:
 
 private:
 	glm::vec4 _color;
-	float _vertices[8];
+	std::vector<Vertex> _vertices;
+	BatchConfig _config;
 };

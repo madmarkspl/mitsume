@@ -10,6 +10,8 @@ struct Vertex
 	glm::vec4 _color;
 	glm::vec2 _texture;
 
+	Vertex() {}
+
 	Vertex(glm::vec3 position, glm::vec4 color, glm::vec2 texture = glm::vec2()) :
 		_position(position), _color(color), _texture(texture) {}
 };
@@ -20,6 +22,8 @@ struct BatchConfig
 	GLint _priority;
 	GLuint _textureId;
 	glm::mat4 _transformMatrix;
+
+	BatchConfig() {}
 
 	BatchConfig(GLuint renderType, GLint priority, GLuint textureId) :
 		_renderType(renderType), _priority(priority), _textureId(textureId) {}
@@ -46,7 +50,7 @@ struct BatchConfig
 class CBatch final
 {
 public:
-	CBatch(GLuint maxVertices);
+	CBatch(GLuint maxVertices = 1000);
 	~CBatch();
 
 	bool matchesConfig(const BatchConfig& config) const;

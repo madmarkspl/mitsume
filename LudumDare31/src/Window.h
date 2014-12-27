@@ -23,7 +23,8 @@ public:
 	void attachCallbackPointer(void*);
 
 	void clear();
-	void drawObject(GLfloat* vertices, GLint size, glm::vec4 color, GLint mode = GL_TRIANGLES, std::string program = "basic");
+	void setModelMatrix(glm::mat4 matrix);
+	void drawObject(const std::vector<Vertex>& vertices, GLint mode = GL_TRIANGLES, std::string program = "basic");
 	void drawRect(GLfloat* vertices, GLint size, glm::vec4 color);
 	void render(const std::vector<Vertex>& vVertices, const BatchConfig& config);
 	void emptyAllBatches();

@@ -1,10 +1,12 @@
 #include <queue>
+#include <SOIL.h>
 #include "Game.h"
 #include "Window.h"
 #include "Service.h"
 #include "Camera.h"
 
-CWindow::CWindow(std::string name, GLuint width, GLuint height) : _name(name), _width(width), _height(height)
+CWindow::CWindow(std::string name, GLuint width, GLuint height) :
+_name(name), _width(width), _height(height)
 {
 	glfwInit();
 
@@ -32,6 +34,9 @@ CWindow::CWindow(std::string name, GLuint width, GLuint height) : _name(name), _
 	glfwSetScrollCallback(_window, CWindow::scrollCallback);
 	glfwSetMouseButtonCallback(_window, CWindow::mouseButtonCallback);
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	_batches.push_back(std::shared_ptr<CBatch>(new CBatch()));
+	_numBatches++;
 }
 
 CWindow::~CWindow()
@@ -51,12 +56,27 @@ void CWindow::attachCallbackPointer(void* game)
 void CWindow::clear()
 {
 	glfwMakeContextCurrent(_window);
+	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_shaders.at("basic").useProgram();
+
+	glm::mat4 viewMatrix = CService::getCamera()->getViewMatrix();
+	glm::mat4 projMatrix = glm::perspective(CService::getCamera()->getZoom(), (float)1280 / (float)720, 0.01f, 100.0f);
+	GLint uniView = glGetUniformLocation(_shaders.at("basic").getProgram(), "view");
+	GLint uniProj = glGetUniformLocation(_shaders.at("basic").getProgram(), "proj");
+
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(projMatrix));
 }
 
-void CWindow::drawObject(GLfloat* vertices, GLint size, glm::vec4 color, GLint mode, std::string program)
+void CWindow::setModelMatrix(glm::mat4 matrix)
+{
+	GLint uniModel = glGetUniformLocation(_shaders.at("basic").getProgram(), "model");
+	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void CWindow::drawObject(const std::vector<Vertex>& vertices, GLint mode, std::string program)
 {
 	/*glm::mat4 viewMatrix;
 	viewMatrix = CService::getCamera()->getViewMatrix();
@@ -76,7 +96,7 @@ void CWindow::drawObject(GLfloat* vertices, GLint size, glm::vec4 color, GLint m
 
 void CWindow::drawRect(GLfloat* vertices, GLint size, glm::vec4 color)
 {
-	GLuint vao;
+	/*GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -113,7 +133,7 @@ void CWindow::drawRect(GLfloat* vertices, GLint size, glm::vec4 color)
 
 	glDrawArrays(GL_LINE_LOOP, 0, 4);
 
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
 }
 
 void CWindow::render(const std::vector<Vertex>& vertices, const BatchConfig& config)
@@ -162,8 +182,6 @@ void CWindow::swapBuffers()
 	glfwSwapBuffers(_window);
 }
 
-//auto compareBatches = [](CBatch* a, CBatch* b) { return a->getPriority > b->getPriority(); };
-
 void CWindow::emptyBatch(CBatch* batchToEmpty, bool emptyAll)
 {
 	std::priority_queue<CBatch*, std::vector<CBatch*>, CompareBatch> queue;
@@ -198,6 +216,16 @@ void CWindow::keyCallback(GLFWwindow* handle, int key, int scancode, int action,
 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(handle, GL_TRUE);
+	else if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+		SOIL_save_screenshot("screenshot.bmp", SOIL_SAVE_TYPE_BMP, 0, 0, 1280, 720);
+	else if (key == GLFW_KEY_W && action == GLFW_PRESS)
+		CService::getCamera()->move(FORWARD);
+	else if (key == GLFW_KEY_S && action == GLFW_PRESS)
+		CService::getCamera()->move(BACKWARD);
+	else if (key == GLFW_KEY_A && action == GLFW_PRESS)
+		CService::getCamera()->move(LEFT);
+	else if (key == GLFW_KEY_D && action == GLFW_PRESS)
+		CService::getCamera()->move(RIGHT);
 }
 
 void CWindow::mouseButtonCallback(GLFWwindow* handle, int buton, int action, int mods)
@@ -210,13 +238,31 @@ void CWindow::mouseButtonCallback(GLFWwindow* handle, int buton, int action, int
 void CWindow::cursorPosCallback(GLFWwindow* handle, double x, double y)
 {
 	CGame *game = static_cast<CGame*>(glfwGetWindowUserPointer(handle));
-
+	
 	game->handleInput(x, y);
+
+	static bool firstMouse = true;
+	static GLfloat lastX, lastY;
+	 
+	if (firstMouse)
+	{
+		lastX = x;
+		lastY = y;
+		firstMouse = false;
+	}
+
+	GLfloat xOffset = x - lastX;
+	GLfloat yOffset = lastY - y;
+
+	lastX = x;
+	lastY = y;
+
+	CService::getCamera()->lookAround(xOffset, yOffset);
 }
 
 void CWindow::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	//std::cout << "scroll!" << std::endl;
+	CService::getCamera()->zoom(yoffset);
 }
 
 /*void CWindow::drawObject(GLfloat* vertices, GLint size, glm::vec4 color, GLint mode, std::string program)

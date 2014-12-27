@@ -5,6 +5,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
+enum Direction
+{
+	FORWARD,
+	BACKWARD,
+	LEFT,
+	RIGHT
+};
+
 class CCamera
 {
 public:
@@ -12,12 +20,17 @@ public:
 	CCamera();
 	~CCamera();
 
-	glm::mat4 getViewMatrix();
-	float getZoom();
+	glm::mat4 getViewMatrix() const;
+	float getZoom() const;
+
+	void move(Direction dir);
+	void lookAround(GLfloat xOffset, GLfloat yOffset, GLboolean constrainPitch = true);
+	void zoom(GLfloat offset);
 
 private:
 	glm::vec3 _position;
 	glm::vec3 _front;
+	glm::vec3 _up;
 	glm::vec3 _right;
 	glm::vec3 _worldUp;
 
