@@ -7,12 +7,13 @@
 struct Vertex
 {
 	glm::vec3 _position;
+	glm::vec3 _normal;
 	glm::vec4 _color;
 	glm::vec2 _texture;
 
 	Vertex() {}
 
-	Vertex(glm::vec3 position, glm::vec4 color, glm::vec2 texture = glm::vec2()) :
+	Vertex(glm::vec3 position, glm::vec3 _normal, glm::vec4 color, glm::vec2 texture = glm::vec2()) :
 		_position(position), _color(color), _texture(texture) {}
 };
 

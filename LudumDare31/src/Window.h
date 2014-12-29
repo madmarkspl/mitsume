@@ -23,9 +23,7 @@ public:
 	void attachCallbackPointer(void*);
 
 	void clear();
-	void setModelMatrix(glm::mat4 matrix);
-	void drawObject(const std::vector<Vertex>& vertices, GLint mode = GL_TRIANGLES, std::string program = "basic");
-	void drawRect(GLfloat* vertices, GLint size, glm::vec4 color);
+	void setModelMatrix(const glm::mat4& matrix);
 	void render(const std::vector<Vertex>& vVertices, const BatchConfig& config);
 	void emptyAllBatches();
 	void swapBuffers();
@@ -36,6 +34,8 @@ private:
 	static void mouseButtonCallback(GLFWwindow* handle, int buton, int action, int mods);
 	static void cursorPosCallback(GLFWwindow* handle, double x, double y);
 	static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+	static int counter;
+	
 	GLFWwindow* _window;
 	GLuint _width;
 	GLuint _height;

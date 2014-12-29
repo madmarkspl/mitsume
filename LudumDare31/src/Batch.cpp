@@ -6,7 +6,7 @@
 CBatch::CBatch(GLuint maxVertices) :
 _maxNumVertices(maxVertices), _numUsedVertices(0),
 	_vao(0), _vbo(0), _config(GL_TRIANGLE_STRIP, 0, 0),
-	_lastVertex(glm::vec3(), glm::vec4())
+	_lastVertex(glm::vec3(), glm::vec3(), glm::vec4())
 {
 	glGetError();
 
@@ -15,7 +15,7 @@ _maxNumVertices(maxVertices), _numUsedVertices(0),
 
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER, _maxNumVertices * sizeof(Vertex), nullptr, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _maxNumVertices * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 
 	GLuint offset = 0;
 
@@ -23,17 +23,22 @@ _maxNumVertices(maxVertices), _numUsedVertices(0),
 	glEnableVertexAttribArray(0);
 	offset += sizeof(glm::vec3);
 
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
 	glEnableVertexAttribArray(1);
+	offset += sizeof(glm::vec3);
+
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
+	glEnableVertexAttribArray(2);
 	offset += sizeof(glm::vec4);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
+	glEnableVertexAttribArray(3);
 
 	glBindVertexArray(0);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 

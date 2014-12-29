@@ -3,12 +3,12 @@
 
 CCamera::CCamera()
 {
-	_position = glm::vec3(0.0f, 0.0f, 0.0f);
+	_position = glm::vec3(-2.0f, 0.0f, 4.0f);
 	_worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	_yaw = -90.0f;
 	_pitch = 0.0f;
 	_front = glm::vec3(0.0f, 0.0f, -1.0f);
-	_movementSpeed = 50.0f;
+	_movementSpeed = 0.5f;
 	_mouseSens = 0.1f;
 	_zoom = 45.0f;
 
@@ -45,7 +45,7 @@ float CCamera::getZoom() const
 
 void CCamera::move(Direction dir)
 {
-	GLfloat velocity = 0.05;
+	GLfloat velocity = _movementSpeed;
 	if (dir == FORWARD)
 		_position += _front * velocity;
 	if (dir == BACKWARD)
@@ -55,8 +55,8 @@ void CCamera::move(Direction dir)
 	if (dir == RIGHT)
 		_position += _right * velocity;
 
-	_position.y = 0.0f;
-	//std::cout << _position.x << " " << _position.y << " " << _position.z << std::endl;
+	//_position.y = 0.0f;
+	std::cout << _position.x << " " << _position.y << " " << _position.z << std::endl;
 }
 
 void CCamera::lookAround(GLfloat xOffset, GLfloat yOffset, GLboolean constrainPitch)

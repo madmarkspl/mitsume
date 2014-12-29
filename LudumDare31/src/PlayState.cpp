@@ -1,3 +1,4 @@
+#include <thread>
 #include <iostream>
 #include "Service.h"
 #include "PlayState.h"
@@ -6,20 +7,20 @@
 
 void CPlayState::init()
 {
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 300; i++)
 	{
-		float x = (float)((rand() % 50) / 1200.0);
-		float y = (float)((rand() % 50) / 700.0);
-		float z = (float)(-1)*((rand() % 100) / 100.0);
-		float w = (float)((rand() % 10 + 10) / 700.0);
-		float h = (float)(w * (1280.0 / 720.0));
-
+		float x = (float)((rand() % 500) / 1200.0);
+		float y = (float)((rand() % 500) / 700.0);
+		float z = (float)((-3)*((rand() % 100) / 100.0));
+		float w = (float)((rand() % 10 + 10) / 200.0);
+		float h = (float)(w);
+		//std::cout << "Unit: " << x << " " << y << " " << z << std::endl;
 		float r, g, b;
 		r = (float)((rand() % 100) / 100.0);
 		g = (float)((rand() % 100) / 100.0);
 		b = (float)((rand() % 100) / 100.0);
 		//std::cout << x << " " << y << " " << w << std::endl;
-		_units.push_back(new CUnit(glm::vec3(x, y, z), w, h, 0.003f, glm::vec4(r, g, b, 1.0)));
+		_units.emplace_back(new CUnit(glm::vec3(x, y, z), w, h, 0.003f, glm::vec4(r, g, b, 1.0f)));
 	}
 }
 
@@ -121,9 +122,15 @@ void CPlayState::drawSelectionRect()
 	_select[3]._position.y = -3;
 	_select[3]._position.z = -5;
 
-	for (int i = 0; i < 4; i++)
+	for (unsigned int i = 0; i < _select.size(); i++)
 	{
-		_select[i]._color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		_select[i]._normal = glm::vec3(0.0f, 0.0f, -1.0f);
+		_select[i]._color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 	}
 	CService::getGraphics()->render(_select, BatchConfig(GL_TRIANGLE_STRIP, 0, 0));
+}
+
+void CPlayState::setupLights()
+{
+	
 }

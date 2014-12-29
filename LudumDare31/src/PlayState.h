@@ -23,6 +23,7 @@ public:
 
 private:
 	void drawSelectionRect();
+	void setupLights();
 
 	std::vector<CUnit*> _units;
 	std::vector<CUnit*> _selectedUnits;

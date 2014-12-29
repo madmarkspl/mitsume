@@ -42,18 +42,26 @@ int main()
 	GLdouble lagTime = 0.0;
 	GLuint frameCount = 0;
 	//GLdouble updateFPS;
-	GLdouble renderFPS;
+	GLdouble fpsLast = previousFrameTime;
 
 	while (!mainWindow->closeCondition())
 	{
 		clear();
-		GLdouble currentFrameTime = glfwGetTime();
+		++frameCount;
+		GLdouble currentFrameTime  = glfwGetTime();
 		GLdouble elapsedTime = (currentFrameTime - previousFrameTime);
 		previousFrameTime = currentFrameTime;
 		lagTime += elapsedTime;
 
-		fpsData.push_back(elapsedTime);
-		fpsData.pop_front();
+		if (currentFrameTime - fpsLast >= 1.0)
+		{
+			std::cout << "ms: " << 1000.0/double(frameCount) << "\t" << std::endl;
+			frameCount = 0;
+			fpsLast = currentFrameTime;
+		}
+
+		//fpsData.push_back(elapsedTime);
+		//fpsData.pop_front();
 		//mitsume.handleInput();
 		glfwPollEvents();
 
@@ -67,15 +75,16 @@ int main()
 
 		mitsume.draw(lagTime / 0.02);
 
-		renderFPS = 0;
+		/*renderFPS = 0;
 		for (GLdouble f : fpsData)
 		{
 			renderFPS += f;
 		}
 		renderFPS /= 1000;
 		renderFPS = 1.0 / renderFPS;
-		//std::cout << renderFPS << "\t" << fpsData.size() << std::endl;
-		frameCount++;
+		if (elapsedTime >= 1.0)
+			std::cout << "FPS: " << renderFPS << "\t" << std::endl;
+		frameCount++;*/
 	}
 
 	return 0;
