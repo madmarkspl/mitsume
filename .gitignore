@@ -7,6 +7,8 @@ glfw/
 glm/
 soil/
 pdcurses/
+freetype/
+*.cd
 
 # User-specific files
 *.suo

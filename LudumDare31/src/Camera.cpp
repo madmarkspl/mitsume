@@ -8,9 +8,10 @@ CCamera::CCamera()
 	_yaw = -90.0f;
 	_pitch = 0.0f;
 	_front = glm::vec3(0.0f, 0.0f, -1.0f);
-	_movementSpeed = 0.5f;
+	_movementSpeed = 0.1f;
 	_mouseSens = 0.1f;
 	_zoom = 45.0f;
+	//_move = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	updateCameraVectors();
 }
@@ -22,9 +23,10 @@ CCamera::CCamera(glm::vec3 position, glm::vec3 up, GLfloat yaw, GLfloat pitch)
 	_yaw = yaw;
 	_pitch = pitch;
 	_front = glm::vec3(0.0f, 0.0f, -1.0f);
-	_movementSpeed = 5.0f;
+	_movementSpeed = 0.1f;
 	_mouseSens = 0.25f;
 	_zoom = 45.0f;
+	//_move = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	updateCameraVectors();
 }
@@ -43,20 +45,48 @@ float CCamera::getZoom() const
 	return _zoom;
 }
 
-void CCamera::move(Direction dir)
+void CCamera::setDirection(Direction dir, GLuint action)
 {
-	GLfloat velocity = _movementSpeed;
-	if (dir == FORWARD)
-		_position += _front * velocity;
-	if (dir == BACKWARD)
-		_position -= _front * velocity;
-	if (dir == LEFT)
-		_position -= _right * velocity;
-	if (dir == RIGHT)
-		_position += _right * velocity;
+	if (dir == FORWARD && action == 1)
+		_movement.F = true;
+	else if (dir == FORWARD && action == 0)
+		_movement.F = false;
 
-	//_position.y = 0.0f;
-	std::cout << _position.x << " " << _position.y << " " << _position.z << std::endl;
+	if (dir == BACKWARD && action == 1)
+		_movement.B = true;
+	else if (dir == BACKWARD && action == 0)
+		_movement.B = false;
+
+	if (dir == LEFT && action == 1)
+		_movement.L = true;
+	else if (dir == LEFT && action == 0)
+		_movement.L = false;
+
+	if (dir == RIGHT && action == 1)
+		_movement.R = true;
+	else if (dir == RIGHT && action == 0)
+		_movement.R = false;
+}
+
+void CCamera::move()
+{
+	glm::vec3 mv;
+
+	if (_movement.F)
+		mv += _front;
+	if (_movement.B)
+		mv -= _front;
+	if (_movement.L)
+		mv -= _right;
+	if (_movement.R)
+		mv += _right;
+
+	if (glm::length(mv) != 0)
+		mv = glm::normalize(mv);
+
+	_position += mv * _movementSpeed;
+	
+	//std::cout << _position.x << " " << _position.y << " " << _position.z << std::endl;
 }
 
 void CCamera::lookAround(GLfloat xOffset, GLfloat yOffset, GLboolean constrainPitch)

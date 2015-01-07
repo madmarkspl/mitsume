@@ -1,7 +1,7 @@
 #include <iostream>
-#include "Service.h"
 #include "IntroState.h"
-#include "Window.h"
+#include "Renderer.h"
+#include "Service.h"
 
 void CIntroState::init()
 {
@@ -41,7 +41,7 @@ void CIntroState::update(CGame* game)
 void CIntroState::draw(CGame* game)
 {
 		
-	CService::getGraphics()->clear();
+	CService::getRenderer()->clear();
 	GLfloat vertices[] = {
 		0.0f, 0.0f, // Vertex 1 (X, Y)
 		0.0f, 2.0f,  // Vertex 2 (X, Y)

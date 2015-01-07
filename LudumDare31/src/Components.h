@@ -4,6 +4,27 @@ class CWindow;
 class CUnit;
 class CLevel;
 
+class CAudioComponent
+{
+public:
+	virtual ~CAudioComponent() {}
+	virtual void update(CUnit& obj) = 0;
+};
+
+class CGraphicsComponent
+{
+public:
+	virtual ~CGraphicsComponent() {}
+	virtual void update(CUnit& obj, CRenderer& renderer) = 0;
+};
+
+class CHealthComponent
+{
+public:
+	virtual ~CHealthComponent() {}
+	virtual void update(CUnit& obj) = 0;
+};
+
 class CInputComponent
 {
 public:
@@ -18,23 +39,9 @@ public:
 		virtual void update(CUnit& obj) = 0;
 };
 
-class CHealthComponent
+class CTransformComponent
 {
 public:
-	virtual ~CHealthComponent() {}
+	virtual ~CTransformComponent() {}
 	virtual void update(CUnit& obj) = 0;
-};
-
-class CGraphicsComponent
-{
-public:
-		virtual ~CGraphicsComponent() {}
-		virtual void update(CUnit& obj, CWindow& window) = 0;
-};
-
-class CAudioComponent
-{
-public:
-		virtual ~CAudioComponent() {}
-		virtual void update(CUnit& obj) = 0;
 };

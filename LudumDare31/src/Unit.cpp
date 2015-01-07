@@ -1,9 +1,11 @@
-#include "Window.h"
+#include "Renderer.h"
 #include "Unit.h"
+#include "Window.h"
 
-CUnit::CUnit(glm::vec3 position, float width, float height, float velocity, glm::vec4 color)
+CUnit::CUnit(glm::vec3 position, glm::vec3 rotation, float width, float height, float velocity, glm::vec4 color, GLuint textureID)
 {
 	_position = position;
+	_rotation = rotation;
 	_width = width;
 	_height = height;
 	_velocity = velocity;
@@ -11,7 +13,7 @@ CUnit::CUnit(glm::vec3 position, float width, float height, float velocity, glm:
 	_input = new CUnitInputComponent();
 	_physics = new CUnitPhysicsComponent();
 	_health = new CUnitHealthComponent();
-	_graphics = new CUnitGraphicsComponent(position, width, height, color);
+	_graphics = new CUnitGraphicsComponent(position, rotation, width, height, color, textureID);
 }
 
 CUnit::~CUnit()
@@ -26,9 +28,9 @@ void CUnit::update()
 	//_audio->update(*this);
 }
 
-void CUnit::draw(CWindow& window)
+void CUnit::draw(CRenderer& renderer)
 {
-	_graphics->update(*this, window);
+	_graphics->update(*this, renderer);
 }
 
 void CUnitInputComponent::update(CUnit& unit)
@@ -60,12 +62,16 @@ void CUnitHealthComponent::update(CUnit& unit)
 
 }
 
-void CUnitGraphicsComponent::update(CUnit& unit, CWindow& window)
+void CUnitGraphicsComponent::update(CUnit& unit, CRenderer& renderer)
 {
-	static glm::mat4 identity;
-	_config._transformMatrix = glm::translate(identity, unit._position);
+	for (unsigned int i = 0; i < 36; ++i)
+		_vertices[i]._transform = unit._position;
 
-	window.render(_vertices, _config);
+	//static glm::mat4 identity;
+	//_config._transformMatrix = glm::translate(identity, unit._position);
+	//_config._transformMatrix = glm::rotate(_config._transformMatrix, unit._rotation.w, (glm::vec3)unit._rotation);
+
+	renderer.render(_vertices, _config);
 }
 
 /*

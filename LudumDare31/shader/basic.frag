@@ -13,9 +13,11 @@ struct PointLight
 	vec3 specular;
 };
 
+uniform sampler2D diffuse;
+
 uniform PointLight light;
 
-uniform mat4 model;
+//uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
@@ -30,10 +32,10 @@ float rand(vec2 co){ return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758
 
 void main()
 {
-	mat3 normalMatrix = transpose(inverse(mat3(model)));
-	vec3 normal = normalize(normalMatrix * vertNormal);
+	//mat3 normalMatrix = transpose(inverse(mat3(model)));
+	vec3 normal = normalize(vertNormal);
 
-	vec3 fragPosition = vec3(model * vec4(vertPosition, 1.0));
+	vec3 fragPosition = vec3(vec4(vertPosition, 1.0));
 
 	vec3 lightDir = normalize(light.position - fragPosition);
 
@@ -42,8 +44,8 @@ void main()
 	float distance = length(light.position - fragPosition);
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
 
-	vec3 ambient = light.ambient * vertColor.rgb;
-	vec3 diffuse = light.diffuse * diff * vertColor.rgb;
+	vec3 ambient = light.ambient * vec3(texture(diffuse, vertTexture));
+	vec3 diffuse = light.diffuse * vec3(texture(diffuse, vertTexture));
 	ambient *= attenuation;
 	diffuse *= attenuation;
 	

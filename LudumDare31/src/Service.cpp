@@ -1,8 +1,9 @@
 #include "Service.h"
 
 int* CService::_audioService;
-CWindow* CService::_graphicsService;
 CCamera* CService::_cameraService;
+CRenderer* CService::_renderService;
+CWindow* CService::_window;
 
 CService::CService()
 {

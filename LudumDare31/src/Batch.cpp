@@ -1,12 +1,12 @@
 #include <exception>
 #include "Batch.h"
+#include "Renderer.h"
 #include "Service.h"
-#include "Window.h"
 
 CBatch::CBatch(GLuint maxVertices) :
 _maxNumVertices(maxVertices), _numUsedVertices(0),
 	_vao(0), _vbo(0), _config(GL_TRIANGLE_STRIP, 0, 0),
-	_lastVertex(glm::vec3(), glm::vec3(), glm::vec4())
+	_lastVertex(glm::vec3(), glm::vec3(), glm::vec3(), glm::vec4())
 {
 	glGetError();
 
@@ -18,27 +18,32 @@ _maxNumVertices(maxVertices), _numUsedVertices(0),
 	glBufferData(GL_ARRAY_BUFFER, _maxNumVertices * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 
 	GLuint offset = 0;
-
+	// Position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
 	glEnableVertexAttribArray(0);
 	offset += sizeof(glm::vec3);
-
+	// Normal
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
 	glEnableVertexAttribArray(1);
 	offset += sizeof(glm::vec3);
-
+	// Color
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
 	glEnableVertexAttribArray(2);
 	offset += sizeof(glm::vec4);
-
+	// Texture
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
 	glEnableVertexAttribArray(3);
+	offset += sizeof(glm::vec2);
+	// Model transform
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offset));
+	glEnableVertexAttribArray(4);
 
 	glBindVertexArray(0);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(3);
+	glDisableVertexAttribArray(4);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -123,7 +128,9 @@ void CBatch::render()
 	if (_numUsedVertices == 0)
 		return;
 
-	CService::getGraphics()->setModelMatrix(_config._transformMatrix);
+	glBindTexture(GL_TEXTURE_2D, _config._textureID);
+
+	CService::getRenderer()->setModelMatrix(_config._transformMatrix);
 
 	glBindVertexArray(_vao);
 	glDrawArrays(_config._renderType, 0, _numUsedVertices);

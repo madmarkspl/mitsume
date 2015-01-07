@@ -7,44 +7,50 @@
 #include <curses.h>
 //#include <cstdio>
 //#include <cstdlib>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <SOIL.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Service.h"
-#include "Window.h"
+
+#include "Camera.h"
 #include "Game.h"
 #include "IntroState.h"
 #include "PlayState.h"
-#include "Camera.h"
+#include "Renderer.h"
+#include "Service.h"
+#include "Window.h"
 
 int main()
 {
 	initscr();
 	std::list<GLdouble> fpsData(1000);
 	srand((unsigned int)time(NULL));
-	CWindow* mainWindow = new CWindow("Test", 1280, 720);
 
+	CWindow mainWindow("Test", 1280, 720);
 	CCamera camera;
-	CService::provideCamera(&camera);
+	CRenderer renderer;
 
 	CShader program("shader/basic.vert", "shader/basic.frag");
-	mainWindow->addShaderProgram("basic", program);
-	CService::provideGraphics(mainWindow);
-
+	renderer.addShaderProgram("basic", program);
+	
 	CGame mitsume;
-	mainWindow->attachCallbackPointer(&mitsume);
+	mainWindow.attachCallbackPointer(&mitsume);
 	mitsume.pushState(new CPlayState());
+
+	CService::provideCamera(&camera);
+	CService::provideRenderer(&renderer);
+	CService::provideWindow(&mainWindow);
 
 	GLdouble previousFrameTime = glfwGetTime();
 	GLdouble lagTime = 0.0;
 	GLuint frameCount = 0;
-	//GLdouble updateFPS;
 	GLdouble fpsLast = previousFrameTime;
+	GLuint cpu = 0;
 
-	while (!mainWindow->closeCondition())
+	while (!mainWindow.closeCondition())
 	{
 		clear();
 		++frameCount;
@@ -55,13 +61,12 @@ int main()
 
 		if (currentFrameTime - fpsLast >= 1.0)
 		{
-			std::cout << "ms: " << 1000.0/double(frameCount) << "\t" << std::endl;
+			std::cout << "ms: " << 1000.0/double(frameCount) << "\tframes: " << frameCount << "\tcpu: " << cpu << std::endl;
 			frameCount = 0;
+			cpu = 0;
 			fpsLast = currentFrameTime;
 		}
 
-		//fpsData.push_back(elapsedTime);
-		//fpsData.pop_front();
 		//mitsume.handleInput();
 		glfwPollEvents();
 
@@ -69,22 +74,12 @@ int main()
 		{
 			mitsume.update();
 			lagTime -= 0.02;	
+			++cpu;
 		}
 
 		//Sleep(20);
 
 		mitsume.draw(lagTime / 0.02);
-
-		/*renderFPS = 0;
-		for (GLdouble f : fpsData)
-		{
-			renderFPS += f;
-		}
-		renderFPS /= 1000;
-		renderFPS = 1.0 / renderFPS;
-		if (elapsedTime >= 1.0)
-			std::cout << "FPS: " << renderFPS << "\t" << std::endl;
-		frameCount++;*/
 	}
 
 	return 0;

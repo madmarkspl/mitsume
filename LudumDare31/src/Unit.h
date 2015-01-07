@@ -8,16 +8,17 @@ class CUnit
 	friend class CUnitGraphicsComponent;
 	friend class CUnitInputComponent;
 public:
-	CUnit(glm::vec3 position, float width, float height, float velocity, glm::vec4 color);
+	CUnit(glm::vec3 position, glm::vec3 rotation, float width, float height, float velocity, glm::vec4 color, GLuint textureID);
 
 	~CUnit();
 
 	void input();
 	void update();
-	void draw(CWindow& window);
+	void draw(CRenderer& renderer);
 
 private:
 	glm::vec3 _position;
+	glm::vec3 _rotation;
 	float _velocity;
 	float _width;
 	float _height;
@@ -67,15 +68,15 @@ private:
 class CUnitGraphicsComponent : public CGraphicsComponent
 {
 public:
-	CUnitGraphicsComponent(glm::vec3 pos, float width, float height, glm::vec4 color) :
-		_color(color), _vertices(36)
+	CUnitGraphicsComponent(glm::vec3 pos, glm::vec3 rot, float width, float height, glm::vec4 color, GLuint textureID) :
+		_color(color), _textureID(textureID),_vertices(36)
 	{
 		float x = (float)((rand() % 100) / 100.0);
 		float y = (float)((rand() % 100) / 100.0);
 		float z = (float)((rand() % 100) / 100.0);
-		_config = BatchConfig(GL_TRIANGLES, 0, 0);
-		_config._transformMatrix = glm::translate(_config._transformMatrix, pos);
-		_config._transformMatrix = glm::rotate(_config._transformMatrix, 30.0f, glm::vec3(x, y, z));
+		_config = BatchConfig(GL_TRIANGLES, 0, textureID);
+		//_config._transformMatrix = glm::translate(_config._transformMatrix, pos);
+		//_config._transformMatrix = glm::rotate(_config._transformMatrix, 30.0f, glm::vec3(x, y, z));
 		
 
 		float halfWidth = width / 2;
@@ -262,13 +263,34 @@ public:
 			_vertices[i]._color = _color;
 		}
 
+		for (unsigned int i = 0; i < 36; ++i)
+		{
+			int modulo = i % 6;
+
+			if (modulo == 0)
+				_vertices[i]._texture = glm::vec2(1.0f, 0.0f);
+			else if (modulo == 1)
+				_vertices[i]._texture = glm::vec2(1.0f, 1.0f);
+			else if (modulo == 2)
+				_vertices[i]._texture = glm::vec2(0.0f, 1.0f);
+			else if (modulo == 3)
+				_vertices[i]._texture = glm::vec2(0.0f, 1.0f);
+			else if (modulo == 4)
+				_vertices[i]._texture = glm::vec2(0.0f, 0.0f);
+			else if (modulo == 5)
+				_vertices[i]._texture = glm::vec2(1.0f, 0.0f);
+
+			_vertices[i]._transform = pos;
+		}
+
 	};
 	~CUnitGraphicsComponent() {};
 
-	void update(CUnit& unit, CWindow& window);
+	void update(CUnit& unit, CRenderer& renderer);
 
 private:
 	glm::vec4 _color;
+	GLuint _textureID;
 	std::vector<Vertex> _vertices;
 
 	BatchConfig _config;

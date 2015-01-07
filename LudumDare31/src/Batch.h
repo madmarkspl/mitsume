@@ -10,30 +10,31 @@ struct Vertex
 	glm::vec3 _normal;
 	glm::vec4 _color;
 	glm::vec2 _texture;
+	glm::vec3 _transform;
 
 	Vertex() {}
 
-	Vertex(glm::vec3 position, glm::vec3 _normal, glm::vec4 color, glm::vec2 texture = glm::vec2()) :
-		_position(position), _color(color), _texture(texture) {}
+	Vertex(glm::vec3 position, glm::vec3 transform, glm::vec3 _normal, glm::vec4 color, glm::vec2 texture = glm::vec2()) :
+		_position(position), _transform(transform), _color(color), _texture(texture) {}
 };
 
 struct BatchConfig
 {
 	GLuint _renderType;
 	GLint _priority;
-	GLuint _textureId;
+	GLuint _textureID;
 	glm::mat4 _transformMatrix;
 
 	BatchConfig() {}
 
 	BatchConfig(GLuint renderType, GLint priority, GLuint textureId) :
-		_renderType(renderType), _priority(priority), _textureId(textureId) {}
+		_renderType(renderType), _priority(priority), _textureID(textureId) {}
 
 	bool operator==(const BatchConfig& other) const
 	{
 		if (_renderType != other._renderType ||
 			_priority != other._priority ||
-			_textureId != other._textureId ||
+			_textureID != other._textureID ||
 			_transformMatrix != other._transformMatrix)
 		{
 			return false;

@@ -13,6 +13,12 @@ enum Direction
 	RIGHT
 };
 
+struct Movement
+{
+	Movement() : F(false), B(false), L(false), R(false) {}
+	GLboolean F, B, L, R;
+};
+
 class CCamera
 {
 public:
@@ -23,7 +29,8 @@ public:
 	glm::mat4 getViewMatrix() const;
 	float getZoom() const;
 
-	void move(Direction dir);
+	void setDirection(Direction dir, GLuint action);
+	void move();
 	void lookAround(GLfloat xOffset, GLfloat yOffset, GLboolean constrainPitch = true);
 	void zoom(GLfloat offset);
 
@@ -37,6 +44,9 @@ private:
 	GLfloat _yaw;
 	GLfloat _pitch;
 
+	glm::vec3 _moveFB;
+	glm::vec3 _moveLR;
+	Movement _movement;
 	GLfloat _movementSpeed;
 	GLfloat _mouseSens;
 	GLfloat _zoom;
