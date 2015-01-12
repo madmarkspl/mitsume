@@ -49,5 +49,9 @@ void main()
 	ambient *= attenuation;
 	diffuse *= attenuation;
 	
+	float z = vertPosition.z;
+
+	diffuse = mix(diffuse, vec3(0.0, 0.0, 0.0), z);
+	
 	outColor = vec4(ambient + diffuse, 1.0);
 }

@@ -3,7 +3,7 @@
 #include "Components.h"
 #include "Batch.h"
 
-class CUnit
+class CUnit final
 {
 	friend class CUnitGraphicsComponent;
 	friend class CUnitInputComponent;

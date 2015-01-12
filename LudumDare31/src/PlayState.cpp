@@ -16,7 +16,7 @@ void CPlayState::init()
 	{
 		float x = (float)((rand() % 500 - 250) / 100.0);
 		float y = (float)((rand() % 500 - 250) / 100.0);
-		float z = (float)((rand() % 100 - 50) / 50.0);
+		float z = (float)((rand() % 200) / 50.0);
 		float w = (float)((rand() % 10 + 10) / 100.0);
 		float h = (float)(w);
 		//std::cout << "Unit: " << x << " " << y << " " << z << std::endl;
